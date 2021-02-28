@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>MCQs APP</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+     
+
+     <div class="container">
+      <div class="jumbotron" style="height: 50p;">
+        <h1 style="text-align:center;">Basic MCQs Application in Django</h1>
+      </div>
+
+      {% block content %}
+      {% endblock content %}
+    </div>
+</body>
+</html>
+
+
+
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+
+
+.option {
+    display: block;
+    height: 50px;
+    background-color: #f4f4f4;
+    position: relative;
+    width: 70%;
+    margin: auto;
+    text-align: center;
+}
+
+.option:hover {
+    background-color: #e8e8e8;
+    cursor: pointer
+}
+
+
+</style>

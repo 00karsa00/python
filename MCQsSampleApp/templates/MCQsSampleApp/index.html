@@ -1,0 +1,30 @@
+{% extends "MCQsSampleApp/base.html" %}
+
+{% block content %}
+        <div class="card" style="width: 75%; margin: auto;">
+            <div class="card-body">
+              <h5 class="card-title" style="text-align: center; ">Select Language</h5>
+        
+              {% for qustion in qustion_topic_list %}
+             
+              <div class="text-center" style="margin-top:10px">
+               
+                <div class="options"> 
+                
+                    <a href="{% url 'question_list' qestion_id=qustion.qestion_id %}" class="btn text-secondary px-0">
+                    <label class="rounded p-2 option" style="width: 200px;">
+                        {{qustion.qestion_topic}}
+                   </label> 
+                    </a>
+                    
+             </div>
+             
+        
+        
+             
+              {% endfor %}
+        
+            </div>
+          </div>
+        
+{% endblock content %}

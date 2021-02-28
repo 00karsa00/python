@@ -1,0 +1,122 @@
+<div id="demo">
+    {% for qustion in qustion_list %}
+
+
+<input type="hidden" id="qestion_id" value="{{ qustion.qestion_id }}"/>
+<input type="hidden" id="qestion_no1" value="{{ mytext }}"/>
+<input type="hidden" id="answer" value="{{ qustion.answer }}"/>
+
+    
+<div class="card" style="width: 80%; margin: auto;">
+    <div class="card-body">
+      <h5 class="card-title">{{ qustion.qestion_no }}.  {{ qustion.qestion }}</h5>
+
+
+      <ul class="list-group">
+        <li class="list-group-item"><input type="checkbox" id="checkbox" name="checkbox" style="margin-right: 10px;" onClick="onlyOne(this)" value="{{ qustion.option_1 }}" > A) {{ qustion.option_1 }}</li>
+        <li class="list-group-item"><input type="checkbox" id="checkbox" name="checkbox" style="margin-right: 10px;" onClick="onlyOne(this)" value="{{ qustion.option_2 }}" > B) {{ qustion.option_2 }}</li>
+        <li class="list-group-item"><input type="checkbox" id="checkbox" name="checkbox" style="margin-right: 10px;" onClick="onlyOne(this)" value="{{ qustion.option_3 }}" > C) {{ qustion.option_3 }}</li>
+        <li class="list-group-item"><input type="checkbox" id="checkbox" name="checkbox" style="margin-right: 10px;" onClick="onlyOne(this)" value="{{ qustion.option_4 }}" > D) {{ qustion.option_4 }}</li>
+      </ul>
+      
+    <div id="reault" style=" margin: auto; margin-top: 20px;">
+      <button type="button" id="ansButtopm" onclick="showAnswer()" class="btn btn-primary">Check Answer</button>
+    </div>
+    <div style=" margin: auto; margin-top: 10px;">
+            <div id="answer_false"> 
+                <h5 class="card-title" style="color: red;">Wrong Answer</h5>
+                <h6 class="card-title" style="color: green">Correct Answer is : <span style="color: grey;"> {{ qustion.answer }}</span></h6>
+             </div>
+            <div id="answer_true"> <h5 class="card-title" style="color: green;">Correct Answer</h5> </div>
+        <button type="button" class="btn btn-secondary" id="next" style="margin-top: 20px;">Next qestion</button>
+    </div>
+  </div>
+
+  
+{% endfor %}
+
+</div>
+
+<script>
+var count=0;
+
+document.getElementById("answer_false").style.display = "none";
+document.getElementById("answer_true").style.display = "none";
+document.getElementById("next").style.display = "none";
+
+function showAnswer(){
+    var checkboxes = document.getElementsByName('checkbox')
+    var x = null
+     var myAns = document.getElementById("answer").value;
+    checkboxes.forEach((item) => {
+        
+        if (item.checked == true) 
+        {
+             x=item.value
+             checkboxes.forEach((item) => {
+                item.disabled = true
+                })
+        } 
+        console.log("outerHeight ans" + x)
+    })
+
+    if(x == null){
+        alert("Please select answer")
+    } else {
+    if(x === myAns)
+    {
+        document.getElementById("next").style.display = "block";
+             document.getElementById("answer_true").style.display = "block";
+             document.getElementById("ansButtopm").style.display = "none";
+             calculate(true)
+    } else {
+        document.getElementById("next").style.display = "block";
+            document.getElementById("answer_false").style.display = "block";
+            document.getElementById("ansButtopm").style.display = "none";
+    }
+}
+
+   
+}
+
+function selectOnlyThis(id){
+  var myCheckbox = document.getElementsByName("myCheckbox");
+ 
+  Array.prototype.forEach.call(myCheckbox,function(el){
+    el.checked = false;
+  });
+  id.checked = true;
+}
+
+function onlyOne(checkbox) {
+    var checkboxes = document.getElementsByName('checkbox')
+    console.log(checkbox)
+    checkboxes.forEach((item) => {
+        if (item !== checkbox) item.checked = false
+    })
+}
+
+$(document).ready(function(){
+        $("#next").click(function(){
+            count=count+1;
+            $.ajax({
+                url:"{% url 'question_details' %}",
+                type: 'post',
+                data:{
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    qestion_id:$("#qestion_id").val(),
+                    qestion_no:$("#qestion_no1").val()
+                },
+                success:function(data){
+                    $('#demo').html(data);
+                }
+
+            });
+        });
+    });
+
+    function stop() {
+        clearTimeout(t);
+        document.getElementById("time").style.display = "none";
+    }
+</script>

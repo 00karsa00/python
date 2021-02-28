@@ -1,0 +1,152 @@
+{% extends "MCQsSampleApp/base.html" %}
+
+
+
+{% block content %}
+
+
+
+<div class="text-center" id="start" style="margin-top:10px">
+
+    <input type="hidden" id="qestion_no" value="1"/>
+ 
+    <button type="button" class="btn btn-primary" style="width: 200px;" id="qestion_id" value="{{mytext}}" onclick="add()">
+        Start
+    </button>
+    </a>
+    
+</div>
+
+<div id="time" align="center" style="padding: 5px; color: grey;">
+   <label>Timer</label> <h4><time>00:00:00</time></h4>
+</div>
+
+
+<div id="subject">
+
+
+</div>
+
+<div id=showResult>
+    <div class="card" style="width: 75%; margin: auto; background-color: #adf0c6;">
+        <div class="card-body">
+          <h5 class="card-title" style="text-align: center; ">Your Result</h5>
+    
+            <table align="center">
+                <tr>
+                    <td>
+                        Total Question:
+                    </td>
+                    <td align="center">
+                        10
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Time :
+                    </td>
+                    <td align="center">
+                        <samp id="timing" > <time>00:00:00</time></samp>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Correct Answers :
+                    </td>
+                    <td align="center">
+                        <samp id="correct_ans"></samp>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><samp id="result1">null</samp></td>
+                </tr>
+            </table>
+                
+         </div>
+         
+        </div>
+      </div>
+</div>
+
+<script>
+    document.getElementById("showResult").style.display = "none";
+    document.getElementById("time").style.display = "none";
+
+    $(document).ready(function(){
+        $("#qestion_id").click(function(){
+
+            document.getElementById("start").style.display = "none";
+            document.getElementById("time").style.display = "block";
+            $.ajax({
+                url:"{% url 'question_details' %}",
+                type: 'post',
+                data:{
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    qestion_id:$("#qestion_id").val(),
+                    qestion_no:$("#qestion_no").val()
+                },
+                success:function(data){
+                    $('#subject').html(data);
+                }
+
+            });
+        });
+    });
+
+
+    var h3 = document.getElementsByTagName('h4')[0],seconds = 0, minutes = 0, hours = 0,t;
+    
+    var correct = 0;
+
+    function add() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    
+    h3.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+
+    timer();
+    }
+    function timer() {
+        t = setTimeout(add, 1000);
+    }
+
+
+    function calculate(answer)
+    {
+        if(answer == true)
+        {
+            correct = correct+1;
+            
+        }
+    }
+
+    function result(){
+        document.getElementById("showResult").style.display = "block";
+        document.getElementById("time").style.display = "none";
+        document.getElementById("subject").style.display = "none";
+        var attem = document.getElementById('attem');
+        var timing = document.getElementById('timing');
+        var Correctamswr = document.getElementById('correct_ans');
+        var result1 = document.getElementById('result1');
+        
+        timing.textContent=(hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+        Correctamswr.textContent= correct;
+        if(correct >= 5){
+            result1.textContent = "Pass"
+        } else {
+            result1.textContent = "fail"
+        }
+    }
+
+    calculate(false)
+</script>
+
+
+{% endblock content %}
