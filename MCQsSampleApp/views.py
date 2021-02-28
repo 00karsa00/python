@@ -16,7 +16,7 @@ def question_details(request):
     qestion_id=request.POST['qestion_id']
     qestion_no=request.POST['qestion_no']
     qestion_no = int(qestion_no)
-    if qestion_no>10:
+    if qestion_no>2:
         return render(request,"MCQsSampleApp/showresult.html")
     else:
         qestion_next = qestion_no+1
